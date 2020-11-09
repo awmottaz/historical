@@ -1,0 +1,30 @@
+{
+  "name": "@awmottaz/historical",
+  "version": "1.0.0",
+  "description": "JavaScript data structures with memory",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports":{
+    ".": "./lib/index.js"
+  },
+  "files": [
+    "./lib/**"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awmottaz/historical.git"
+  },
+  "keywords": [
+    "javascript",
+    "typescript"
+  ],
+  "author": "Tony Mottaz <tony@mottaz.dev> (https://tonymottaz.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/awmottaz/historical/issues"
+  },
+  "homepage": "https://github.com/awmottaz/historical#readme"
+}
