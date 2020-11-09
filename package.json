@@ -4,14 +4,14 @@
   "description": "JavaScript data structures with memory",
   "type": "module",
   "main": "./lib/index.js",
-  "exports":{
+  "exports": {
     ".": "./lib/index.js"
   },
   "files": [
     "./lib/**"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "ts-standard"
   },
   "repository": {
     "type": "git",
@@ -26,5 +26,16 @@
   "bugs": {
     "url": "https://github.com/awmottaz/historical/issues"
   },
-  "homepage": "https://github.com/awmottaz/historical#readme"
+  "homepage": "https://github.com/awmottaz/historical#readme",
+  "dependencies": {},
+  "ts-standard": {
+    "files": [
+      "src/*"
+    ],
+    "fix": true
+  },
+  "devDependencies": {
+    "ts-standard": "^9.0.0",
+    "typescript": "^4.0.5"
+  }
 }
