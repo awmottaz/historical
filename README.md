@@ -2,13 +2,7 @@
 
 `historical` is a library of drop-in replacements for native JavaScript data structures that have been modified to record a history of the mutations they have seen. These data structures can be used for debugging how data got to a certain state, and could even be leveraged for time-travel debugging.
 
-- [historical](#historical)
-  - [API](#api)
-    - [HMap](#hmap)
-
-## API
-
-### HMap
+## HMap
 
 An `HMap` is a replacement for a JavaScript `Map`.
 
