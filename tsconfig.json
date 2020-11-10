@@ -1,13 +1,12 @@
 {
-  "include": ["src/*"],
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "module": "es2015",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./lib",
-    "rootDir": "./",
+    "rootDir": "./src",
     "downlevelIteration": true,
     "isolatedModules": true,
     "strict": true,
@@ -19,6 +18,7 @@
     "baseUrl": "./",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ES2015", "DOM"]
   }
 }
