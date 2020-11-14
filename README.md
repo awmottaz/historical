@@ -9,26 +9,26 @@ An `HMap` is a replacement for a JavaScript `Map`.
 **TypeScript**
 
 ```ts
-import { HMap } from '@awmottaz/historical/HMap';
+import { HMap } from "@awmottaz/historical/HMap";
 
 const m = new HMap<string, number>();
-m.set('one', 1);
-m.set('two', 2);
-m.set('three', 3);
-m.delete('one');
+m.set("one", 1);
+m.set("two", 2);
+m.set("three", 3);
+m.delete("one");
 m.clear();
 ```
 
 **JavaScript**
 
 ```js
-import { HMap } from '@awmottaz/historical/HMap';
+import { HMap } from "@awmottaz/historical/HMap";
 
 const m = new HMap();
-m.set('one', 1);
-m.set('two', 2);
-m.set('three', 3);
-m.delete('one');
+m.set("one", 1);
+m.set("two", 2);
+m.set("three", 3);
+m.delete("one");
 m.clear();
 ```
 
@@ -37,59 +37,59 @@ All of the mutation history of the `HMap` object is saved internally and accessi
 ```js
 [
   {
-    "action": "set",
-    "args": ["one", 1],
-    "dataBefore": [],
-    "dataAfter": [ ["one", 1] ],
-    "timestamp": 37.77617900073528
+    action: "set",
+    args: ["one", 1],
+    dataBefore: [],
+    dataAfter: [["one", 1]],
+    timestamp: 37.77617900073528,
   },
   {
-    "action": "set",
-    "args": ["two", 2],
-    "dataBefore": [ ["one", 1] ],
-    "dataAfter": [
+    action: "set",
+    args: ["two", 2],
+    dataBefore: [["one", 1]],
+    dataAfter: [
       ["one", 1],
-      ["two", 2]
+      ["two", 2],
     ],
-    "timestamp": 37.79919400066137
+    timestamp: 37.79919400066137,
   },
   {
-    "action": "set",
-    "args": ["three", 3],
-    "dataBefore": [
-      ["one", 1],
-      ["two", 2]
-    ],
-    "dataAfter": [
+    action: "set",
+    args: ["three", 3],
+    dataBefore: [
       ["one", 1],
       ["two", 2],
-      ["three", 3]
     ],
-    "timestamp": 37.80457499995828
+    dataAfter: [
+      ["one", 1],
+      ["two", 2],
+      ["three", 3],
+    ],
+    timestamp: 37.80457499995828,
   },
   {
-    "action": "delete",
-    "args": ["one"],
-    "dataBefore": [
+    action: "delete",
+    args: ["one"],
+    dataBefore: [
       ["one", 1],
       ["two", 2],
-      ["three", 3]
+      ["three", 3],
     ],
-    "dataAfter": [
+    dataAfter: [
       ["two", 2],
-      ["three", 3]
+      ["three", 3],
     ],
-    "timestamp": 37.8447650000453
+    timestamp: 37.8447650000453,
   },
   {
-    "action": "clear",
-    "args": [],
-    "dataBefore": [
+    action: "clear",
+    args: [],
+    dataBefore: [
       ["two", 2],
-      ["three", 3]
+      ["three", 3],
     ],
-    "dataAfter": [],
-    "timestamp": 37.875222001224756
-  }
-]
+    dataAfter: [],
+    timestamp: 37.875222001224756,
+  },
+];
 ```

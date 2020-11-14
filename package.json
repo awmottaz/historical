@@ -2,32 +2,46 @@
   "name": "@awmottaz/historical",
   "version": "1.0.0",
   "description": "JavaScript data structures with memory",
-  "author": "Tony Mottaz <tony@mottaz.dev> (https://tonymottaz.com)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/awmottaz/historical/issues"
-  },
-  "homepage": "https://github.com/awmottaz/historical#readme",
   "keywords": [
     "javascript",
     "typescript",
     "map"
   ],
-  "engines": {
-    "node": ">=14"
+  "homepage": "https://github.com/awmottaz/historical#readme",
+  "bugs": {
+    "url": "https://github.com/awmottaz/historical/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/awmottaz/historical"
+  },
+  "license": "MIT",
+  "author": "Tony Mottaz <tony@mottaz.dev> (https://tonymottaz.com)",
   "type": "module",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "directories": {
     "lib": "./lib",
-    "src": "./src",
-    "test": "./src"
+    "test": "./src",
+    "src": "./src"
   },
   "scripts": {
     "compile": "tsc",
+    "prefmt": "npm run lint:fix",
+    "fmt": "prettier --write .",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "npm run lint -- --fix",
     "prepublish": "npm run compile",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\"}' mocha"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": "eslint --cache --fix",
+    "*.{ts,json}": "prettier --write"
   },
   "dependencies": {
     "w3c-hr-time": "^1.0.2"
@@ -35,9 +49,24 @@
   "devDependencies": {
     "@types/chai": "^4.2.14",
     "@types/mocha": "^8.0.4",
+    "@typescript-eslint/eslint-plugin": "^4.7.0",
+    "@typescript-eslint/parser": "^4.7.0",
     "chai": "^4.2.0",
+    "eslint": "^7.13.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-chai-expect": "^2.2.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-mocha": "^8.0.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1",
     "mocha": "^8.2.1",
+    "prettier": "2.1.2",
+    "prettier-plugin-packagejson": "^2.2.7",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.5"
+  },
+  "engines": {
+    "node": ">=14"
   }
 }
