@@ -1,10 +1,11 @@
 {
+  "include": ["src/*.ts"],
+  "exclude": ["src/*.test.ts", "types"],
   "compilerOptions": {
     "target": "es2015",
     "module": "es2015",
     "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    "declarationMap": false,
     "outDir": "./lib",
     "rootDir": "./src",
     "downlevelIteration": true,
@@ -19,6 +20,8 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["ES2015", "DOM"]
+    "lib": ["ES2015"],
+    "emitDeclarationOnly": true,
+    "typeRoots": ["types", "node_modules/@types"]
   }
 }

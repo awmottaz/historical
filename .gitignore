@@ -1,5 +1,6 @@
 # tsc build output
 lib
+@types
 
 # Logs
 *.log

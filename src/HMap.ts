@@ -1,3 +1,7 @@
+import { Performance, DOMHighResTimeStamp } from 'w3c-hr-time';
+
+const performance = new Performance();
+
 /**
  * An HMapMutation is a record of data mutation in the HMap.
  */
