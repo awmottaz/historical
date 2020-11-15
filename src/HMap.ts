@@ -30,7 +30,7 @@ export interface HMapMutation<K, V> {
   dataAfter: Readonly<Array<[K, V]>>;
 
   /** Additional information provided about the mutation. */
-  remark?: string;
+  remark: string | null;
 }
 
 /**
@@ -40,10 +40,25 @@ export interface HMapMutation<K, V> {
 export class HMap<K, V> extends Map<K, V> {
   /** Stores the history of mutations to the Map. */
   private readonly _history: Array<HMapMutation<K, V>> = [];
+  private _remark: string | null = null;
 
   /** The current history of mutations to this `HMap` object. */
   get history(): Readonly<Array<HMapMutation<K, V>>> {
     return this._history.map((h) => Object.freeze(h));
+  }
+
+  /**
+   * Adds a remark comment to the next mutation record in history.
+   * @param comment the comment to include in the next history entry.
+   * @returns this
+   * @example
+   * const s = new HMap<number, string>();
+   * s.remark('hello world').set(1, 'one');
+   * s.history[0].remark // "hello world"
+   */
+  remark(comment: string): this {
+    this._remark = comment;
+    return this;
   }
 
   /**
@@ -54,7 +69,7 @@ export class HMap<K, V> extends Map<K, V> {
    * @param remark Add a comment to the history entry for this operation.
    * @returns The `HMap` object.
    */
-  set(key: K, value: V, remark?: string): this {
+  set(key: K, value: V): this {
     const dataBefore = Object.freeze(Array.from(this.entries()));
     Map.prototype.set.call(this, key, value);
     const dataAfter = Object.freeze(Array.from(this.entries()));
@@ -65,8 +80,9 @@ export class HMap<K, V> extends Map<K, V> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
-      remark,
+      remark: this._remark,
     });
+    this._remark = null;
 
     return this;
   }
@@ -78,7 +94,7 @@ export class HMap<K, V> extends Map<K, V> {
    * @param key The key of the element to remove from the `HMap` object.
    * @param remark Add a comment to the history entry for this operation.
    */
-  delete(key: K, remark?: string): boolean {
+  delete(key: K): boolean {
     const dataBefore = Object.freeze(Array.from(this.entries()));
     const retVal = Map.prototype.delete.call(this, key);
     const dataAfter = Object.freeze(Array.from(this.entries()));
@@ -89,8 +105,9 @@ export class HMap<K, V> extends Map<K, V> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
-      remark,
+      remark: this._remark,
     });
+    this._remark = null;
 
     return retVal;
   }
@@ -100,7 +117,7 @@ export class HMap<K, V> extends Map<K, V> {
    *
    * @param remark Add a comment to the history entry for this operation.
    */
-  clear(remark?: string): void {
+  clear(): void {
     const dataBefore = Object.freeze(Array.from(this.entries()));
     Map.prototype.clear.call(this);
     const dataAfter = Object.freeze(Array.from(this.entries()));
@@ -111,7 +128,8 @@ export class HMap<K, V> extends Map<K, V> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
-      remark,
+      remark: this._remark,
     });
+    this._remark = null;
   }
 }
