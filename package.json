@@ -41,7 +41,7 @@
   },
   "lint-staged": {
     "*.ts": "eslint --cache --fix",
-    "*.{ts,json}": "prettier --write"
+    "*.{ts,json,md}": "prettier --write"
   },
   "dependencies": {
     "w3c-hr-time": "^1.0.2"
