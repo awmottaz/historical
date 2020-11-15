@@ -30,7 +30,7 @@ export interface HSetMutation<T> {
   dataAfter: Readonly<Array<T>>;
 
   /** Additional information provided about the mutation. */
-  remark?: string;
+  remark: string | null;
 }
 
 /**
@@ -40,10 +40,25 @@ export interface HSetMutation<T> {
 export class HSet<T> extends Set<T> {
   /** Stores the history of mutations to the Map. */
   private readonly _history: Array<HSetMutation<T>> = [];
+  private _remark: string | null = null;
 
   /** The current history of mutations to this `HSet` object. */
   get history(): Readonly<Array<HSetMutation<T>>> {
     return this._history.map((h) => Object.freeze(h));
+  }
+
+  /**
+   * Adds a remark comment to the next mutation record in history.
+   * @param comment the comment to include in the next history entry.
+   * @returns this
+   * @example
+   * const s = new HSet<number>();
+   * s.remark('adding a one').add(1);
+   * s.history[0].remark // "adding a one"
+   */
+  remark(comment: string): this {
+    this._remark = comment;
+    return this;
   }
 
   /**
@@ -62,7 +77,9 @@ export class HSet<T> extends Set<T> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark: this._remark,
     });
+    this._remark = null;
 
     return this;
   }
@@ -78,13 +95,15 @@ export class HSet<T> extends Set<T> {
     const retVal = Set.prototype.delete.call(this, value);
     const dataAfter = Object.freeze(Array.from(this.values()));
 
-    this._history.push({
+    this._history?.push({
       action: "delete",
       args: [value],
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark: this._remark,
     });
+    this._remark = null;
 
     return retVal;
   }
@@ -97,12 +116,14 @@ export class HSet<T> extends Set<T> {
     Set.prototype.clear.call(this);
     const dataAfter = Object.freeze(Array.from(this.values()));
 
-    this._history.push({
+    this._history?.push({
       action: "clear",
       args: [],
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark: this._remark,
     });
+    this._remark = null;
   }
 }
