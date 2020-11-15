@@ -66,5 +66,17 @@ describe("HSet", function () {
       expect(s.history).has.length(1);
       expect(s.history[0].remark).eq("test delete remark");
     });
+
+    it("only remarks on the next mutation", function () {
+      const m = new HSet<number>();
+      m.add(1);
+      m.remark("only the second add").add(2);
+      m.add(3);
+
+      expect(m.history).has.length(3);
+      expect(m.history[0].remark).eq(null);
+      expect(m.history[1].remark).eq("only the second add");
+      expect(m.history[2].remark).eq(null);
+    });
   });
 });

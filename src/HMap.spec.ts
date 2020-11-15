@@ -93,5 +93,17 @@ describe("HMap", function () {
       expect(m.history).has.length(1);
       expect(m.history[0].remark).eq("test clear remark");
     });
+
+    it("only remarks on the next mutation", function () {
+      const m = new HMap<number, boolean>();
+      m.set(1, true);
+      m.remark("only the second set").set(2, true);
+      m.set(3, true);
+
+      expect(m.history).has.length(3);
+      expect(m.history[0].remark).eq(null);
+      expect(m.history[1].remark).eq("only the second set");
+      expect(m.history[2].remark).eq(null);
+    });
   });
 });
