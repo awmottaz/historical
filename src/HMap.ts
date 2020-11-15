@@ -39,16 +39,11 @@ export interface HMapMutation<K, V> {
  */
 export class HMap<K, V> extends Map<K, V> {
   /** Stores the history of mutations to the Map. */
-  readonly #history: Array<HMapMutation<K, V>>;
-
-  constructor(entries?: readonly (readonly [K, V])[] | null) {
-    super(entries);
-    this.#history = [];
-  }
+  private readonly _history: Array<HMapMutation<K, V>> = [];
 
   /** The current history of mutations to this `HMap` object. */
   get history(): Readonly<Array<HMapMutation<K, V>>> {
-    return this.#history.map((h) => Object.freeze(h));
+    return this._history.map((h) => Object.freeze(h));
   }
 
   /**
@@ -64,7 +59,7 @@ export class HMap<K, V> extends Map<K, V> {
     Map.prototype.set.call(this, key, value);
     const dataAfter = Object.freeze(Array.from(this.entries()));
 
-    this.#history.push({
+    this._history?.push({
       action: "set",
       args: [key, value],
       dataBefore,
@@ -88,7 +83,7 @@ export class HMap<K, V> extends Map<K, V> {
     const retVal = Map.prototype.delete.call(this, key);
     const dataAfter = Object.freeze(Array.from(this.entries()));
 
-    this.#history.push({
+    this._history.push({
       action: "delete",
       args: [key],
       dataBefore,
@@ -110,7 +105,7 @@ export class HMap<K, V> extends Map<K, V> {
     Map.prototype.clear.call(this);
     const dataAfter = Object.freeze(Array.from(this.entries()));
 
-    this.#history.push({
+    this._history.push({
       action: "clear",
       args: [],
       dataBefore,

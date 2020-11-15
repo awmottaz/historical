@@ -4,60 +4,57 @@ import { HMap } from "./HMap";
 describe("HMap history API", function () {
   it("remembers set mutations", function () {
     const m = new HMap<number, boolean>();
-    m.set(0, true);
-    m.set(1, true);
-    m.set(2, true);
+    const out = m.set(1, true);
 
-    expect(m.history).has.length(3);
-
-    m.history.forEach(({ action, args }, i) => {
-      expect(action).eq("set");
-      expect(args).deep.eq([i, true]);
-    });
-
-    expect(m.history[2]).has.deep.property("dataAfter", [
-      [0, true],
-      [1, true],
-      [2, true],
-    ]);
+    expect(out).eq(m);
+    expect(m.history).has.length(1);
+    const { action, args, dataBefore, dataAfter } = m.history[0];
+    expect(action).eq("set");
+    expect(args).deep.eq([1, true]);
+    expect(dataBefore).deep.eq([]);
+    expect(dataAfter).deep.eq([[1, true]]);
   });
 
   it("remembers delete mutations", function () {
-    const m = new HMap<number, boolean>();
-    m.set(0, true);
-    m.set(1, true);
-    m.set(2, true);
-    m.delete(1);
-
-    expect(m.history).has.length(4);
-
-    const { action, args, dataAfter } = m.history[3];
-
-    expect(action).eq("delete");
-    expect(args).deep.eq([1]);
-    expect(dataAfter).deep.eq([
-      [0, true],
+    const m = new HMap<number, boolean>([
+      [1, true],
       [2, true],
+      [3, true],
+    ]);
+    const out = m.delete(2);
+
+    expect(out).true;
+    expect(m.history).has.length(1);
+    const { action, args, dataBefore, dataAfter } = m.history[0];
+    expect(action).eq("delete");
+    expect(args).deep.eq([2]);
+    expect(dataBefore).deep.eq([
+      [1, true],
+      [2, true],
+      [3, true],
+    ]);
+    expect(dataAfter).deep.eq([
+      [1, true],
+      [3, true],
     ]);
   });
 
   it("remembers clear mutations", function () {
-    const m = new HMap<number, boolean>();
-    m.set(0, true);
-    m.set(1, true);
-    m.set(2, true);
+    const m = new HMap<number, boolean>([
+      [1, true],
+      [2, true],
+      [3, true],
+    ]);
     m.clear();
 
-    expect(m.history).has.length(4);
-
-    const { action, args, dataBefore, dataAfter } = m.history[3];
-
+    expect(m.history).has.length(1);
+    const { action, args, dataBefore, dataAfter } = m.history[0];
     expect(action).eq("clear");
     expect(args).deep.eq([]);
     expect(dataBefore).deep.eq([
-      [0, true],
       [1, true],
       [2, true],
+      [3, true],
     ]);
     expect(dataAfter).deep.eq([]);
   });
