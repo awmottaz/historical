@@ -51,11 +51,11 @@ export interface HArrayMutation<T> {
  */
 export class HArray<T> extends Array<T> {
   /** Stores the history of mutations to the Array. */
-  readonly #history: Array<HArrayMutation<T>> = [];
+  private readonly _history: Array<HArrayMutation<T>> = [];
 
   /** The current history of mutations to this `HArray` object. */
   get history(): Readonly<Array<HArrayMutation<T>>> {
-    return this.#history.map((h) => Object.freeze(h));
+    return this._history.map((h) => Object.freeze(h));
   }
 
   /**
@@ -113,7 +113,7 @@ export class HArray<T> extends Array<T> {
     Array.prototype.copyWithin.call(this, target, start, end);
     const dataAfter = Object.freeze(cloneDeep(this.slice()));
 
-    this.#history.push({
+    this._history.push({
       action: "copyWithin",
       args: [target, start, end],
       dataBefore,
@@ -137,7 +137,7 @@ export class HArray<T> extends Array<T> {
     Array.prototype.fill.call(this, value, start, end);
     const dataAfter = Object.freeze(cloneDeep(this.slice()));
 
-    this.#history.push({
+    this._history.push({
       action: "fill",
       args: [value, start, end],
       dataBefore,
@@ -156,7 +156,7 @@ export class HArray<T> extends Array<T> {
     const retVal = Array.prototype.pop.call(this);
     const dataAfter = Object.freeze(cloneDeep(this.slice()));
 
-    this.#history.push({
+    this._history.push({
       action: "pop",
       args: [],
       dataBefore,
@@ -176,7 +176,7 @@ export class HArray<T> extends Array<T> {
     const retVal = Array.prototype.push.call(this, ...items);
     const dataAfter = Object.freeze(cloneDeep(this.slice()));
 
-    this.#history.push({
+    this._history.push({
       action: "push",
       args: [...items],
       dataBefore,
@@ -195,7 +195,7 @@ export class HArray<T> extends Array<T> {
     const retVal = Array.prototype.reverse.call(this);
     const dataAfter = Object.freeze(cloneDeep(this.slice()));
 
-    this.#history.push({
+    this._history.push({
       action: "reverse",
       args: [],
       dataBefore,
@@ -214,7 +214,7 @@ export class HArray<T> extends Array<T> {
     const retVal = Array.prototype.shift.call(this);
     const dataAfter = Object.freeze(cloneDeep(this.slice()));
 
-    this.#history.push({
+    this._history.push({
       action: "shift",
       args: [],
       dataBefore,
@@ -239,7 +239,7 @@ export class HArray<T> extends Array<T> {
     Array.prototype.sort.call(this, compareFn);
     const dataAfter = Object.freeze(cloneDeep(this.slice()));
 
-    this.#history.push({
+    this._history.push({
       action: "sort",
       args: [],
       dataBefore,
@@ -273,7 +273,7 @@ export class HArray<T> extends Array<T> {
     );
     const dataAfter = Object.freeze(cloneDeep(this.slice()));
 
-    this.#history.push({
+    this._history.push({
       action: "splice",
       args: [start, deleteCount, ...items],
       dataBefore,
@@ -293,7 +293,7 @@ export class HArray<T> extends Array<T> {
     const retVal = Array.prototype.unshift.call(this, ...items);
     const dataAfter = Object.freeze(cloneDeep(this.slice()));
 
-    this.#history.push({
+    this._history.push({
       action: "unshift",
       args: [...items],
       dataBefore,
