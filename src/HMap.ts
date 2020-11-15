@@ -1,4 +1,5 @@
 import { Performance, DOMHighResTimeStamp } from "w3c-hr-time";
+import { StrictExtract } from "./types";
 
 const performance = new Performance();
 
@@ -7,7 +8,7 @@ const performance = new Performance();
  */
 export interface HMapMutation<K, V> {
   /** Records which action initiated the mutation. */
-  action: "set" | "delete" | "clear";
+  action: StrictExtract<keyof Map<K, V>, "set" | "delete" | "clear">;
 
   /**
    * The list of arguments passed to the mutation method. For example, after a call to
@@ -37,7 +38,7 @@ export interface HMapMutation<K, V> {
  * in the HMap, accessible via the new `.history` instance property.
  */
 export class HMap<K, V> extends Map<K, V> {
-  /** Stores the history of mutations to the underlying Map. */
+  /** Stores the history of mutations to the Map. */
   readonly #history: Array<HMapMutation<K, V>>;
 
   constructor(entries?: readonly (readonly [K, V])[] | null) {
