@@ -10,4 +10,4 @@ This package is not yet published.
 
 ## Usage
 
-Usage instructions will be written after the initial release.
+Docs are TBD until the initial release. For now, you can look at the unit tests for example of how to use this.
