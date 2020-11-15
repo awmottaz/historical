@@ -42,7 +42,7 @@ export interface HArrayMutation<T> {
   dataAfter: Readonly<Array<T>>;
 
   /** Additional information provided about the mutation. */
-  remark?: string;
+  remark: string | null;
 }
 
 /**
@@ -52,10 +52,25 @@ export interface HArrayMutation<T> {
 export class HArray<T> extends Array<T> {
   /** Stores the history of mutations to the Array. */
   private readonly _history: Array<HArrayMutation<T>> = [];
+  private _remark: string | null = null;
 
   /** The current history of mutations to this `HArray` object. */
   get history(): Readonly<Array<HArrayMutation<T>>> {
     return this._history.map((h) => Object.freeze(h));
+  }
+
+  /**
+   * Adds a remark comment to the next mutation record in history.
+   * @param comment the comment to include in the next history entry.
+   * @returns this
+   * @example
+   * const s = new HArray<number>();
+   * s.remark('adding a one').push(1);
+   * s.history[0].remark // "adding a one"
+   */
+  remark(comment: string): this {
+    this._remark = comment;
+    return this;
   }
 
   /**
@@ -119,7 +134,9 @@ export class HArray<T> extends Array<T> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark: this._remark,
     });
+    this._remark = null;
 
     return this;
   }
@@ -143,7 +160,9 @@ export class HArray<T> extends Array<T> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark: this._remark,
     });
+    this._remark = null;
 
     return this;
   }
@@ -162,7 +181,9 @@ export class HArray<T> extends Array<T> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark: this._remark,
     });
+    this._remark = null;
 
     return retVal;
   }
@@ -182,7 +203,9 @@ export class HArray<T> extends Array<T> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark: this._remark,
     });
+    this._remark = null;
 
     return retVal;
   }
@@ -201,7 +224,9 @@ export class HArray<T> extends Array<T> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark: this._remark,
     });
+    this._remark = null;
 
     return retVal;
   }
@@ -220,7 +245,9 @@ export class HArray<T> extends Array<T> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark: this._remark,
     });
+    this._remark = null;
 
     return retVal;
   }
@@ -245,7 +272,9 @@ export class HArray<T> extends Array<T> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark: this._remark,
     });
+    this._remark = null;
 
     return this;
   }
@@ -279,7 +308,9 @@ export class HArray<T> extends Array<T> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark: this._remark,
     });
+    this._remark = null;
 
     return retVal;
   }
@@ -299,7 +330,9 @@ export class HArray<T> extends Array<T> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark: this._remark,
     });
+    this._remark = null;
 
     return retVal;
   }
