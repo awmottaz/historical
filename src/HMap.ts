@@ -27,6 +27,9 @@ export interface HMapMutation<K, V> {
 
   /** A frozen copy of the output to `entries()` after executing the mutation. */
   dataAfter: Readonly<Array<[K, V]>>;
+
+  /** Additional information provided about the mutation. */
+  remark?: string;
 }
 
 /**
@@ -93,8 +96,12 @@ export class HMap<K, V> implements Map<K, V> {
     return this.#map.entries();
   }
 
-  /** Removes all key-value pairs from the `HMap` object. */
-  clear(): void {
+  /**
+   * Removes all key-value pairs from the `HMap` object.
+   *
+   * @param remark Add a comment to the history entry for this operation.
+   */
+  clear(remark?: string): void {
     const dataBefore = Object.freeze(Array.from(this.#map.entries()));
     this.#map.clear();
     const dataAfter = Object.freeze(Array.from(this.#map.entries()));
@@ -105,6 +112,7 @@ export class HMap<K, V> implements Map<K, V> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark,
     });
   }
 
@@ -113,8 +121,9 @@ export class HMap<K, V> implements Map<K, V> {
    * the element does not exist. `HMap.prototype.has(key)` will return `false` afterwards.
    *
    * @param key The key of the element to remove from the `HMap` object.
+   * @param remark Add a comment to the history entry for this operation.
    */
-  delete(key: K): boolean {
+  delete(key: K, remark?: string): boolean {
     const dataBefore = Object.freeze(Array.from(this.#map.entries()));
     const retVal = this.#map.delete(key);
     const dataAfter = Object.freeze(Array.from(this.#map.entries()));
@@ -125,6 +134,7 @@ export class HMap<K, V> implements Map<K, V> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark,
     });
 
     return retVal;
@@ -170,9 +180,10 @@ export class HMap<K, V> implements Map<K, V> {
    *
    * @param key The key of the element to add to the `HMap` object.
    * @param value The value of the element to add to the `HMap` object.
+   * @param remark Add a comment to the history entry for this operation.
    * @returns The `HMap` object.
    */
-  set(key: K, value: V): this {
+  set(key: K, value: V, remark?: string): this {
     const dataBefore = Object.freeze(Array.from(this.#map.entries()));
     this.#map.set(key, value);
     const dataAfter = Object.freeze(Array.from(this.#map.entries()));
@@ -183,6 +194,7 @@ export class HMap<K, V> implements Map<K, V> {
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
+      remark,
     });
 
     return this;

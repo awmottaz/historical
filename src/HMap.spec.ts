@@ -61,4 +61,17 @@ describe("HMap history API", function () {
     ]);
     expect(dataAfter).deep.eq([]);
   });
+
+  it("captures remarks about mutations", function () {
+    const m = new HMap<number, boolean>();
+
+    m.set(0, true, "set operation");
+    m.delete(0, "delete operation");
+    m.clear("clear operation");
+
+    expect(m.history).to.have.length(3);
+    expect(m.history[0].remark).to.eq("set operation");
+    expect(m.history[1].remark).to.eq("delete operation");
+    expect(m.history[2].remark).to.eq("clear operation");
+  });
 });
