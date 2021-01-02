@@ -51,12 +51,12 @@ export interface HArrayMutation<T> {
  */
 export class HArray<T> extends Array<T> {
   /** Stores the history of mutations to the Array. */
-  private readonly _history: Array<HArrayMutation<T>> = [];
-  private _remark: string | null = null;
+  readonly #history: Array<HArrayMutation<T>> = [];
+  #remark: string | null = null;
 
   /** The current history of mutations to this `HArray` object. */
   get history(): Readonly<Array<HArrayMutation<T>>> {
-    return this._history.map((h) => Object.freeze(h));
+    return this.#history.map((h) => Object.freeze(h));
   }
 
   /**
@@ -69,7 +69,7 @@ export class HArray<T> extends Array<T> {
    * s.history[0].remark // "adding a one"
    */
   remark(comment: string): this {
-    this._remark = comment;
+    this.#remark = comment;
     return this;
   }
 
@@ -124,19 +124,19 @@ export class HArray<T> extends Array<T> {
    * @param end If not specified, length of the this object is used as its default value.
    */
   copyWithin(target: number, start: number, end?: number): this {
-    const dataBefore = Object.freeze(cloneDeep(this.slice()));
+    const dataBefore = Object.freeze(cloneDeep(Array.from(this).slice()));
     Array.prototype.copyWithin.call(this, target, start, end);
-    const dataAfter = Object.freeze(cloneDeep(this.slice()));
+    const dataAfter = Object.freeze(cloneDeep(Array.from(this).slice()));
 
-    this._history.push({
+    this.#history.push({
       action: "copyWithin",
       args: [target, start, end],
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
-      remark: this._remark,
+      remark: this.#remark,
     });
-    this._remark = null;
+    this.#remark = null;
 
     return this;
   }
@@ -150,19 +150,19 @@ export class HArray<T> extends Array<T> {
    * length+end.
    */
   fill(value: T, start?: number, end?: number): this {
-    const dataBefore = Object.freeze(cloneDeep(this.slice()));
+    const dataBefore = Object.freeze(cloneDeep(Array.from(this).slice()));
     Array.prototype.fill.call(this, value, start, end);
-    const dataAfter = Object.freeze(cloneDeep(this.slice()));
+    const dataAfter = Object.freeze(cloneDeep(Array.from(this).slice()));
 
-    this._history.push({
+    this.#history.push({
       action: "fill",
       args: [value, start, end],
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
-      remark: this._remark,
+      remark: this.#remark,
     });
-    this._remark = null;
+    this.#remark = null;
 
     return this;
   }
@@ -171,19 +171,19 @@ export class HArray<T> extends Array<T> {
    * Removes the last element from an array and returns it.
    */
   pop(): T | undefined {
-    const dataBefore = Object.freeze(cloneDeep(this.slice()));
+    const dataBefore = Object.freeze(cloneDeep(Array.from(this).slice()));
     const retVal = Array.prototype.pop.call(this);
-    const dataAfter = Object.freeze(cloneDeep(this.slice()));
+    const dataAfter = Object.freeze(cloneDeep(Array.from(this).slice()));
 
-    this._history.push({
+    this.#history.push({
       action: "pop",
       args: [],
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
-      remark: this._remark,
+      remark: this.#remark,
     });
-    this._remark = null;
+    this.#remark = null;
 
     return retVal;
   }
@@ -193,19 +193,19 @@ export class HArray<T> extends Array<T> {
    * @param items New elements of the Array.
    */
   push(...items: T[]): number {
-    const dataBefore = Object.freeze(cloneDeep(this.slice()));
+    const dataBefore = Object.freeze(cloneDeep(Array.from(this).slice()));
     const retVal = Array.prototype.push.call(this, ...items);
-    const dataAfter = Object.freeze(cloneDeep(this.slice()));
+    const dataAfter = Object.freeze(cloneDeep(Array.from(this).slice()));
 
-    this._history.push({
+    this.#history.push({
       action: "push",
       args: [...items],
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
-      remark: this._remark,
+      remark: this.#remark,
     });
-    this._remark = null;
+    this.#remark = null;
 
     return retVal;
   }
@@ -214,19 +214,19 @@ export class HArray<T> extends Array<T> {
    * Reverses the elements in an Array.
    */
   reverse(): T[] {
-    const dataBefore = Object.freeze(cloneDeep(this.slice()));
+    const dataBefore = Object.freeze(cloneDeep(Array.from(this).slice()));
     const retVal = Array.prototype.reverse.call(this);
-    const dataAfter = Object.freeze(cloneDeep(this.slice()));
+    const dataAfter = Object.freeze(cloneDeep(Array.from(this).slice()));
 
-    this._history.push({
+    this.#history.push({
       action: "reverse",
       args: [],
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
-      remark: this._remark,
+      remark: this.#remark,
     });
-    this._remark = null;
+    this.#remark = null;
 
     return retVal;
   }
@@ -235,19 +235,19 @@ export class HArray<T> extends Array<T> {
    * Removes the first element from an array and returns it.
    */
   shift(): T | undefined {
-    const dataBefore = Object.freeze(cloneDeep(this.slice()));
+    const dataBefore = Object.freeze(cloneDeep(Array.from(this).slice()));
     const retVal = Array.prototype.shift.call(this);
-    const dataAfter = Object.freeze(cloneDeep(this.slice()));
+    const dataAfter = Object.freeze(cloneDeep(Array.from(this).slice()));
 
-    this._history.push({
+    this.#history.push({
       action: "shift",
       args: [],
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
-      remark: this._remark,
+      remark: this.#remark,
     });
-    this._remark = null;
+    this.#remark = null;
 
     return retVal;
   }
@@ -262,19 +262,19 @@ export class HArray<T> extends Array<T> {
    * ```
    */
   sort(compareFn?: (a: T, b: T) => number): this {
-    const dataBefore = Object.freeze(cloneDeep(this.slice()));
+    const dataBefore = Object.freeze(cloneDeep(Array.from(this).slice()));
     Array.prototype.sort.call(this, compareFn);
-    const dataAfter = Object.freeze(cloneDeep(this.slice()));
+    const dataAfter = Object.freeze(cloneDeep(Array.from(this).slice()));
 
-    this._history.push({
+    this.#history.push({
       action: "sort",
       args: [],
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
-      remark: this._remark,
+      remark: this.#remark,
     });
-    this._remark = null;
+    this.#remark = null;
 
     return this;
   }
@@ -293,24 +293,24 @@ export class HArray<T> extends Array<T> {
    */
   splice(start: number, deleteCount: number, ...items: T[]): T[];
   splice(start: number, deleteCount: number, ...items: T[]): T[] {
-    const dataBefore = Object.freeze(cloneDeep(this.slice()));
+    const dataBefore = Object.freeze(cloneDeep(Array.from(this).slice()));
     const retVal = Array.prototype.splice.call(
       this,
       start,
       deleteCount,
       ...items
     );
-    const dataAfter = Object.freeze(cloneDeep(this.slice()));
+    const dataAfter = Object.freeze(cloneDeep(Array.from(this).slice()));
 
-    this._history.push({
+    this.#history.push({
       action: "splice",
       args: [start, deleteCount, ...items],
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
-      remark: this._remark,
+      remark: this.#remark,
     });
-    this._remark = null;
+    this.#remark = null;
 
     return retVal;
   }
@@ -320,19 +320,19 @@ export class HArray<T> extends Array<T> {
    * @param items  Elements to insert at the start of the Array.
    */
   unshift(...items: T[]): number {
-    const dataBefore = Object.freeze(cloneDeep(this.slice()));
+    const dataBefore = Object.freeze(cloneDeep(Array.from(this).slice()));
     const retVal = Array.prototype.unshift.call(this, ...items);
-    const dataAfter = Object.freeze(cloneDeep(this.slice()));
+    const dataAfter = Object.freeze(cloneDeep(Array.from(this).slice()));
 
-    this._history.push({
+    this.#history.push({
       action: "unshift",
       args: [...items],
       dataBefore,
       dataAfter,
       timestamp: performance.now(),
-      remark: this._remark,
+      remark: this.#remark,
     });
-    this._remark = null;
+    this.#remark = null;
 
     return retVal;
   }

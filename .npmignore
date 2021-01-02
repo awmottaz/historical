@@ -1,2 +1,2 @@
-# do not publish the source files
 src/
+tests/

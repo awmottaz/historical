@@ -1,26 +1,30 @@
 {
   "include": ["src/**/*"],
-  "exclude": ["types"],
+  "exclude": ["types", "node_modules"],
   "compilerOptions": {
-    "target": "es2015",
-    "module": "es2015",
+    "target": "ESNext",
+    "module": "ESNext",
     "declaration": true,
     "sourceMap": true,
     "declarationMap": true,
     "outDir": "./lib",
     "rootDir": "./src",
-    "downlevelIteration": true,
     "isolatedModules": true,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ES2015"],
     "typeRoots": ["types", "node_modules/@types"]
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "include": ["tests/**/*"],
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
   }
 }
