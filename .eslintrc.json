@@ -1,7 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "mocha"],
   "extends": [
     "eslint:recommended",
     "plugin:eslint-comments/recommended",
@@ -9,6 +9,7 @@
     "plugin:import/warnings",
     "plugin:import/typescript",
     "plugin:@typescript-eslint/recommended",
+    "plugin:mocha/recommended",
     "prettier",
     "prettier/@typescript-eslint"
   ],
